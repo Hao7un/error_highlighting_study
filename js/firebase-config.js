@@ -10,7 +10,6 @@
  * 6. Replace the placeholder values below with your actual config
  */
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyALFj4JDIXrBAL8MuNzImRdzsd7pw5qo0A",
   authDomain: "error-highlighting-study.firebaseapp.com",
@@ -20,7 +19,6 @@ const firebaseConfig = {
   appId: "1:1075199296528:web:2d4e451b910a2fa3d5f695",
   measurementId: "G-DXE416DPB8"
 };
-
 
 // Initialize Firebase
 let db = null;

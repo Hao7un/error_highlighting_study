@@ -524,6 +524,62 @@ input[type="range"]::-webkit-slider-thumb {
   color: var(--text);
 }
 
+/* Flag buttons (v2 interaction mode) */
+.flag-buttons {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.flag-btn {
+  background: var(--bg-muted);
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all var(--transition);
+  opacity: 0.7;
+}
+
+.flag-btn:hover { opacity: 1; transform: scale(1.05); }
+
+.flag-btn.correct.selected {
+  background: var(--success-bg);
+  border-color: var(--success);
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--success-bg);
+}
+
+.flag-btn.problem.selected {
+  background: var(--error-highlight-bg);
+  border-color: var(--error-highlight);
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--error-highlight-bg);
+}
+
+/* Step state after flagging */
+.plan-step.flagged-correct {
+  border-left: 4px solid var(--success);
+  background: #f6faf6;
+}
+
+.plan-step.flagged-problem {
+  border-left: 4px solid var(--error-highlight);
+  background: var(--error-highlight-bg);
+}
+
+/* Override for already-highlighted steps when flagged */
+.plan-step.error-highlighted.flagged-correct {
+  border-left: 4px solid var(--success);
+  background: #f6faf6;
+}
+
+.plan-step.error-highlighted.flagged-problem {
+  border-left: 4px solid var(--error-highlight);
+  background: var(--error-highlight-bg);
+}
+
 /* Error highlighting (treatment condition) */
 .plan-step.error-highlighted {
   background: var(--error-highlight-bg);
