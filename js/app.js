@@ -212,6 +212,9 @@ function renderConsentForm(c) {
               <span>${i + 1}. ${t}</span>
             </div>`).join("")}
         </div>
+        <div style="margin:0.75rem 0;">
+          <button class="btn btn-outline" onclick="toggleAllConsent()">Select All</button>
+        </div>
         <p class="validation-error" id="consent-error">Please confirm all items to proceed.</p>
         <div class="btn-group center">
           <button class="btn btn-secondary" onclick="navigateTo('info-sheet')">← Back</button>
@@ -219,6 +222,13 @@ function renderConsentForm(c) {
         </div>
       </div>
     </div>`;
+}
+
+function toggleAllConsent() {
+  const boxes = document.querySelectorAll('#consent-items input');
+  const allChecked = Array.from(boxes).every(b => b.checked);
+  boxes.forEach(b => b.checked = !allChecked);
+  checkConsent();
 }
 
 function checkConsent() {
