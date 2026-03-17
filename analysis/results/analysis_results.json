@@ -1,130 +1,500 @@
 {
-  "calibrated_trust": {
-    "control_mean": 0.25,
-    "control_std": 0.3535533905932738,
-    "treatment_mean": 1.0,
-    "treatment_std": 0.0,
-    "t_stat": 3.0,
-    "p_value": 0.20483276469913345,
-    "wilcoxon_stat": 0.0,
-    "wilcoxon_p": 0.5,
-    "cohens_d": 3.0
+  "H1": {
+    "overall": {
+      "control_mean": 0.25,
+      "control_std": 0.3535533905932738,
+      "control_n": 2,
+      "treatment_mean": 1.0,
+      "treatment_std": 0.0,
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": 3.0,
+        "p": 0.20483276469913345
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "sig": "n.s."
+    },
+    "by_task": {
+      "alarm": {
+        "control": 0.0,
+        "treatment": 1.0
+      },
+      "flight": {
+        "control": 1.0,
+        "treatment": 1.0
+      },
+      "repair": {
+        "control": 0.0,
+        "treatment": 1.0
+      },
+      "currency": {
+        "control": 0.0,
+        "treatment": 1.0
+      }
+    }
   },
-  "editing_behavior": {
+  "H2": {
     "num_edits": {
       "control_mean": 1.5,
+      "control_std": 0.7071067811865476,
+      "control_n": 2,
       "treatment_mean": 2.5,
-      "t_stat": Infinity,
-      "p_value": 0.0
+      "treatment_std": 0.7071067811865476,
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": Infinity,
+        "p": 0.0
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "cohens_d": 1.414213562373095,
+      "sig": "\u2020\u2020"
     },
-    "mean_duration": {
-      "control_mean": 105.0,
-      "treatment_mean": 108.75,
-      "t_stat": 0.2727272727272727,
-      "p_value": 0.830498681077136
+    "num_edit_actions": {
+      "control_mean": 1.5,
+      "control_std": 0.7071067811865476,
+      "control_n": 2,
+      "treatment_mean": 2.5,
+      "treatment_std": 0.7071067811865476,
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": Infinity,
+        "p": 0.0
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "cohens_d": 1.414213562373095,
+      "sig": "\u2020\u2020"
+    },
+    "duration_s": {
+      "control_mean": 210.0,
+      "control_std": 7.0710678118654755,
+      "control_n": 2,
+      "treatment_mean": 217.5,
+      "treatment_std": 45.96194077712559,
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": 0.2727272727272727,
+        "p": 0.830498681077136
+      },
+      "wilcoxon": {
+        "W": 1.0,
+        "p": 1.0
+      },
+      "cohens_d": 0.22808577638091165,
+      "sig": "n.s."
+    },
+    "by_task": {
+      "alarm": {
+        "ctrl_edits": 1.0,
+        "treat_edits": 1.0,
+        "ctrl_dur": 95.0,
+        "treat_dur": 85.0
+      },
+      "flight": {
+        "ctrl_edits": 1.0,
+        "treat_edits": 1.0,
+        "ctrl_dur": 120.0,
+        "treat_dur": 100.0
+      },
+      "repair": {
+        "ctrl_edits": 0.0,
+        "treat_edits": 2.0,
+        "ctrl_dur": 75.0,
+        "treat_dur": 110.0
+      },
+      "currency": {
+        "ctrl_edits": 1.0,
+        "treat_edits": 1.0,
+        "ctrl_dur": 130.0,
+        "treat_dur": 140.0
+      }
+    }
+  },
+  "H3": {
+    "overall": {
+      "control_mean": 1.0,
+      "control_std": 0.0,
+      "control_n": 4,
+      "treatment_mean": 0.75,
+      "treatment_std": 0.5,
+      "treatment_n": 4,
+      "ttest_paired": {
+        "t": -1.0,
+        "p": 0.3910022189557705
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 1.0
+      },
+      "sig": "n.s.",
+      "note": "One-sided: treatment > control (complacency hypothesis)"
+    },
+    "hl_detection": {
+      "mean": 1.0,
+      "std": 0.0,
+      "n": 4
+    },
+    "by_task": {
+      "alarm": {
+        "ctrl": 1.0,
+        "treat": 1.0
+      },
+      "flight": {
+        "ctrl": 1.0,
+        "treat": 1.0
+      },
+      "repair": {
+        "ctrl": 1.0,
+        "treat": 0.0
+      },
+      "currency": {
+        "ctrl": 1.0,
+        "treat": 1.0
+      }
     }
   },
   "nasa_tlx": {
     "mental_demand": {
       "control_mean": 50.0,
       "control_std": 7.0710678118654755,
+      "control_n": 2,
       "treatment_mean": 37.5,
       "treatment_std": 3.5355339059327378,
-      "t_stat": -5.0,
-      "p_value": 0.1256659163780024
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": -5.0,
+        "p": 0.1256659163780024
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "cohens_d": -2.23606797749979,
+      "sig": "n.s.",
+      "control_ci95": [
+        -13.531023680873474,
+        113.53102368087347
+      ],
+      "treatment_ci95": [
+        5.734488159563263,
+        69.26551184043674
+      ]
     },
     "physical_demand": {
       "control_mean": 10.0,
       "control_std": 0.0,
+      "control_n": 2,
       "treatment_mean": 7.5,
       "treatment_std": 3.5355339059327378,
-      "t_stat": -1.0,
-      "p_value": 0.5000000000000001
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": -1.0,
+        "p": 0.5000000000000001
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 1.0
+      },
+      "sig": "n.s.",
+      "control_ci95": [
+        NaN,
+        NaN
+      ],
+      "treatment_ci95": [
+        -24.265511840436737,
+        39.26551184043674
+      ]
     },
     "temporal_demand": {
       "control_mean": 35.0,
       "control_std": 7.0710678118654755,
+      "control_n": 2,
       "treatment_mean": 30.0,
       "treatment_std": 7.0710678118654755,
-      "t_stat": -Infinity,
-      "p_value": 0.0
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": -Infinity,
+        "p": 0.0
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "cohens_d": -0.7071067811865475,
+      "sig": "\u2020\u2020",
+      "control_ci95": [
+        -28.531023680873474,
+        98.53102368087347
+      ],
+      "treatment_ci95": [
+        -33.531023680873474,
+        93.53102368087347
+      ]
     },
     "performance": {
       "control_mean": 30.0,
       "control_std": 7.0710678118654755,
+      "control_n": 2,
       "treatment_mean": 25.0,
       "treatment_std": 7.0710678118654755,
-      "t_stat": -Infinity,
-      "p_value": 0.0
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": -Infinity,
+        "p": 0.0
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "cohens_d": -0.7071067811865475,
+      "sig": "\u2020\u2020",
+      "control_ci95": [
+        -33.531023680873474,
+        93.53102368087347
+      ],
+      "treatment_ci95": [
+        -38.531023680873474,
+        88.53102368087347
+      ]
     },
     "effort": {
       "control_mean": 45.0,
       "control_std": 7.0710678118654755,
+      "control_n": 2,
       "treatment_mean": 37.5,
       "treatment_std": 10.606601717798213,
-      "t_stat": -3.0,
-      "p_value": 0.20483276469913345
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": -3.0,
+        "p": 0.20483276469913345
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "cohens_d": -0.8320502943378435,
+      "sig": "n.s.",
+      "control_ci95": [
+        -18.531023680873474,
+        108.53102368087347
+      ],
+      "treatment_ci95": [
+        -57.796535521310204,
+        132.7965355213102
+      ]
     },
     "frustration": {
       "control_mean": 27.5,
       "control_std": 10.606601717798213,
+      "control_n": 2,
       "treatment_mean": 20.0,
       "treatment_std": 7.0710678118654755,
-      "t_stat": -3.0,
-      "p_value": 0.20483276469913345
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": -3.0,
+        "p": 0.20483276469913345
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "cohens_d": -0.8320502943378435,
+      "sig": "n.s.",
+      "control_ci95": [
+        -67.7965355213102,
+        122.7965355213102
+      ],
+      "treatment_ci95": [
+        -43.531023680873474,
+        83.53102368087347
+      ]
     },
     "overall": {
       "control_mean": 32.916666666666664,
       "control_std": 6.481812160876687,
+      "control_n": 2,
       "treatment_mean": 26.25,
       "treatment_std": 5.303300858899107,
-      "t_stat": -7.999999999999994,
-      "p_value": 0.07916684832113115
+      "treatment_n": 2,
+      "ttest_paired": {
+        "t": -7.999999999999994,
+        "p": 0.07916684832113115
+      },
+      "wilcoxon": {
+        "W": 0.0,
+        "p": 0.5
+      },
+      "cohens_d": -1.1257560715684662,
+      "sig": "n.s.",
+      "control_ci95": [
+        -25.32010504080069,
+        91.15343837413403
+      ],
+      "treatment_ci95": [
+        -21.398267760655102,
+        73.8982677606551
+      ]
     }
   },
-  "missed_errors": {
-    "control_miss_rate_mean": 1.0,
-    "treatment_miss_rate_mean": 0.75,
-    "mann_whitney_u": 6.0,
-    "p_value": 0.8943502263331446,
-    "note": "One-sided test: treatment > control (complacency hypothesis)"
+  "covariates": {
+    "note": "Insufficient data"
+  },
+  "task_corr": {
+    "Risk \u00d7 CTp": {
+      "r": 0.0,
+      "p": 1.0,
+      "sig": ""
+    },
+    "Risk \u00d7 Edits": {
+      "r": 0.0,
+      "p": 1.0,
+      "sig": ""
+    },
+    "Edits \u00d7 CTp": {
+      "r": 0.5163977794943222,
+      "p": 0.19011614915973798,
+      "sig": ""
+    },
+    "Risk \u00d7 Duration": {
+      "r": 0.7715167498104596,
+      "p": 0.024943223294391567,
+      "sig": "\u2020"
+    }
+  },
+  "failures": {
+    "alarm:s3.1": {
+      "type": "wrong_value",
+      "desc": "AM vs PM time error",
+      "ctrl_rate": 1.0,
+      "treat_rate": 1.0,
+      "ctrl_n": 1,
+      "treat_n": 1
+    },
+    "alarm:s3.3": {
+      "type": "irrelevant_step",
+      "desc": "Irrelevant time zone check",
+      "ctrl_rate": 0.0,
+      "treat_rate": 0.0,
+      "ctrl_n": 1,
+      "treat_n": 1
+    },
+    "flight:s3.1": {
+      "type": "swapped_values",
+      "desc": "Departure/arrival cities swapped",
+      "ctrl_rate": 1.0,
+      "treat_rate": 1.0,
+      "ctrl_n": 1,
+      "treat_n": 1
+    },
+    "flight:s4.1": {
+      "type": "wrong_label",
+      "desc": "Outbound vs return mislabel",
+      "ctrl_rate": 0.0,
+      "treat_rate": 0.0,
+      "ctrl_n": 1,
+      "treat_n": 1
+    },
+    "repair:s1.2": {
+      "type": "wrong_value",
+      "desc": "Wrong brand name",
+      "ctrl_rate": 0.0,
+      "treat_rate": 1.0,
+      "ctrl_n": 1,
+      "treat_n": 1
+    },
+    "repair:s3.1": {
+      "type": "wrong_value",
+      "desc": "Wrong appointment time",
+      "ctrl_rate": 0.0,
+      "treat_rate": 1.0,
+      "ctrl_n": 1,
+      "treat_n": 1
+    },
+    "currency:s2.1.1": {
+      "type": "wrong_value",
+      "desc": "Wrong amount",
+      "ctrl_rate": 1.0,
+      "treat_rate": 1.0,
+      "ctrl_n": 1,
+      "treat_n": 1
+    },
+    "currency:s2": {
+      "type": "structural",
+      "desc": "Transactions not split",
+      "ctrl_rate": 0.0,
+      "treat_rate": 0.0,
+      "ctrl_n": 1,
+      "treat_n": 1
+    }
   },
   "post_task": {
     "perceived_usefulness": {
       "mean": 5.5,
       "std": 0.7071067811865476,
       "median": 5.5,
-      "n": 2
+      "n": 2,
+      "ci95": [
+        -0.8531023680873471,
+        11.853102368087347
+      ]
     },
     "perceived_reliability": {
       "mean": 4.5,
       "std": 0.7071067811865476,
       "median": 4.5,
-      "n": 2
+      "n": 2,
+      "ci95": [
+        -1.853102368087347,
+        10.853102368087347
+      ]
     },
     "confidence_with_highlighting": {
       "mean": 5.5,
       "std": 0.7071067811865476,
       "median": 5.5,
-      "n": 2
+      "n": 2,
+      "ci95": [
+        -0.8531023680873471,
+        11.853102368087347
+      ]
     },
     "attention_allocation": {
       "mean": 5.5,
       "std": 0.7071067811865476,
       "median": 5.5,
-      "n": 2
+      "n": 2,
+      "ci95": [
+        -0.8531023680873471,
+        11.853102368087347
+      ]
     },
     "complacency_awareness": {
       "mean": 3.5,
       "std": 0.7071067811865476,
       "median": 3.5,
-      "n": 2
+      "n": 2,
+      "ci95": [
+        -2.853102368087347,
+        9.853102368087347
+      ]
     },
     "overall_preference": {
       "mean": 5.5,
       "std": 0.7071067811865476,
       "median": 5.5,
-      "n": 2
+      "n": 2,
+      "ci95": [
+        -0.8531023680873471,
+        11.853102368087347
+      ]
     }
   }
 }
