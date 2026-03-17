@@ -1,0 +1,5 @@
+pid,condition,mental_demand,physical_demand,temporal_demand,performance,effort,frustration,overall
+P_SAMPLE_01,control,45,10,30,25,40,20,28.333333333333332
+P_SAMPLE_01,treatment,35,10,25,20,30,15,22.5
+P_SAMPLE_02,treatment,40,5,35,30,45,25,30.0
+P_SAMPLE_02,control,55,10,40,35,50,35,37.5

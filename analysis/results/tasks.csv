@@ -1,0 +1,9 @@
+pid,task_id,condition,risk,trust_judgment,num_edits,duration_ms,duration_s,edited_plan_length
+P_SAMPLE_01,alarm,control,low,True,1,95000,95.0,2
+P_SAMPLE_01,flight,control,medium,False,1,120000,120.0,0
+P_SAMPLE_01,repair,treatment,medium,False,2,110000,110.0,0
+P_SAMPLE_01,currency,treatment,high,False,1,140000,140.0,0
+P_SAMPLE_02,alarm,treatment,low,False,1,85000,85.0,0
+P_SAMPLE_02,flight,treatment,medium,False,1,100000,100.0,0
+P_SAMPLE_02,repair,control,medium,True,0,75000,75.0,0
+P_SAMPLE_02,currency,control,high,True,1,130000,130.0,0

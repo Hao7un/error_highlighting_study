@@ -1,0 +1,194 @@
+{
+  "P_SAMPLE_01": {
+    "participantId": "P_SAMPLE_01",
+    "counterbalanceGroup": 1,
+    "conditionOrder": ["control", "treatment"],
+    "consent": { "consented": true, "timestamp": "2026-03-18T10:00:00Z" },
+    "demographics": {
+      "age": "25–34",
+      "gender": "Male",
+      "education": "Master's degree",
+      "llm_freq": "Daily",
+      "llm_familiarity": "Very familiar — I regularly evaluate and edit LLM outputs",
+      "ai_trust": "5"
+    },
+    "taskResults": {
+      "alarm": {
+        "condition": "control",
+        "taskId": "alarm",
+        "risk": "low",
+        "trustJudgment": true,
+        "edits": [
+          {"stepId": "s3.1", "action": "edit", "oldText": "wrong AM", "newText": "fixed PM"}
+        ],
+        "editedPlan": [
+          {"stepId": "s1", "text": "1. Set the alarm for every weekday"},
+          {"stepId": "s3.1", "text": "3.1 Get new alarm (08:00 PM, Thursday)"}
+        ],
+        "duration": 95000
+      },
+      "flight": {
+        "condition": "control",
+        "taskId": "flight",
+        "risk": "medium",
+        "trustJudgment": false,
+        "edits": [
+          {"stepId": "s3.1", "action": "edit", "oldText": "London to Amsterdam", "newText": "Amsterdam to London"}
+        ],
+        "editedPlan": [],
+        "duration": 120000
+      },
+      "repair": {
+        "condition": "treatment",
+        "taskId": "repair",
+        "risk": "medium",
+        "trustJudgment": false,
+        "edits": [
+          {"stepId": "s1.2", "action": "edit", "oldText": "Samsung", "newText": "Sony"},
+          {"stepId": "s3.1", "action": "edit", "oldText": "5 PM", "newText": "6 PM"}
+        ],
+        "editedPlan": [],
+        "duration": 110000
+      },
+      "currency": {
+        "condition": "treatment",
+        "taskId": "currency",
+        "risk": "high",
+        "trustJudgment": false,
+        "edits": [
+          {"stepId": "s2.1.1", "action": "edit", "oldText": "5000", "newText": "10000"}
+        ],
+        "editedPlan": [],
+        "duration": 140000
+      }
+    },
+    "nasaTlx": {
+      "conditionA": {
+        "mental_demand": 45,
+        "physical_demand": 10,
+        "temporal_demand": 30,
+        "performance": 25,
+        "effort": 40,
+        "frustration": 20
+      },
+      "conditionB": {
+        "mental_demand": 35,
+        "physical_demand": 10,
+        "temporal_demand": 25,
+        "performance": 20,
+        "effort": 30,
+        "frustration": 15
+      }
+    },
+    "postTask": {
+      "perceived_usefulness": 6,
+      "perceived_reliability": 5,
+      "confidence_with_highlighting": 6,
+      "attention_allocation": 5,
+      "complacency_awareness": 4,
+      "overall_preference": 6
+    },
+    "interview": {
+      "attention_strategy": "I focused more on highlighted steps when they were present.",
+      "editing_strategy": "The highlighting helped me know where to look first.",
+      "trust_perception": "I felt more confident with highlighting but worried about missing other errors.",
+      "difficulties": "No major difficulties.",
+      "suggestions": "Maybe show confidence levels instead of binary highlights."
+    },
+    "totalDuration": 900000,
+    "completedAt": "2026-03-18T10:15:00Z"
+  },
+  "P_SAMPLE_02": {
+    "participantId": "P_SAMPLE_02",
+    "counterbalanceGroup": 2,
+    "conditionOrder": ["treatment", "control"],
+    "consent": { "consented": true, "timestamp": "2026-03-18T11:00:00Z" },
+    "demographics": {
+      "age": "18–24",
+      "gender": "Female",
+      "education": "Undergraduate",
+      "llm_freq": "Several times a week",
+      "llm_familiarity": "Somewhat familiar — I use LLMs but don't closely scrutinise outputs",
+      "ai_trust": "4"
+    },
+    "taskResults": {
+      "alarm": {
+        "condition": "treatment",
+        "taskId": "alarm",
+        "risk": "low",
+        "trustJudgment": false,
+        "edits": [
+          {"stepId": "s3.1", "action": "edit", "oldText": "08:00 AM", "newText": "08:00 PM"}
+        ],
+        "editedPlan": [],
+        "duration": 85000
+      },
+      "flight": {
+        "condition": "treatment",
+        "taskId": "flight",
+        "risk": "medium",
+        "trustJudgment": false,
+        "edits": [
+          {"stepId": "s3.1", "action": "edit", "oldText": "London", "newText": "Amsterdam"}
+        ],
+        "editedPlan": [],
+        "duration": 100000
+      },
+      "repair": {
+        "condition": "control",
+        "taskId": "repair",
+        "risk": "medium",
+        "trustJudgment": true,
+        "edits": [],
+        "editedPlan": [],
+        "duration": 75000
+      },
+      "currency": {
+        "condition": "control",
+        "taskId": "currency",
+        "risk": "high",
+        "trustJudgment": true,
+        "edits": [
+          {"stepId": "s2.1.1", "action": "edit", "oldText": "5000", "newText": "10000"}
+        ],
+        "editedPlan": [],
+        "duration": 130000
+      }
+    },
+    "nasaTlx": {
+      "conditionA": {
+        "mental_demand": 40,
+        "physical_demand": 5,
+        "temporal_demand": 35,
+        "performance": 30,
+        "effort": 45,
+        "frustration": 25
+      },
+      "conditionB": {
+        "mental_demand": 55,
+        "physical_demand": 10,
+        "temporal_demand": 40,
+        "performance": 35,
+        "effort": 50,
+        "frustration": 35
+      }
+    },
+    "postTask": {
+      "perceived_usefulness": 5,
+      "perceived_reliability": 4,
+      "confidence_with_highlighting": 5,
+      "attention_allocation": 6,
+      "complacency_awareness": 3,
+      "overall_preference": 5
+    },
+    "interview": {
+      "attention_strategy": "I noticed I was less careful with non-highlighted steps.",
+      "editing_strategy": "Without highlighting, I had to check everything more carefully.",
+      "trust_perception": "Highlighting made me more suspicious of flagged steps.",
+      "difficulties": "Some tasks were a bit confusing at first.",
+      "suggestions": "Add a summary of changes before the trust judgment."
+    },
+    "totalDuration": 850000,
+    "completedAt": "2026-03-18T11:14:10Z"
+  }
+}

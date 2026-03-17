@@ -1,0 +1,130 @@
+{
+  "calibrated_trust": {
+    "control_mean": 0.25,
+    "control_std": 0.3535533905932738,
+    "treatment_mean": 1.0,
+    "treatment_std": 0.0,
+    "t_stat": 3.0,
+    "p_value": 0.20483276469913345,
+    "wilcoxon_stat": 0.0,
+    "wilcoxon_p": 0.5,
+    "cohens_d": 3.0
+  },
+  "editing_behavior": {
+    "num_edits": {
+      "control_mean": 1.5,
+      "treatment_mean": 2.5,
+      "t_stat": Infinity,
+      "p_value": 0.0
+    },
+    "mean_duration": {
+      "control_mean": 105.0,
+      "treatment_mean": 108.75,
+      "t_stat": 0.2727272727272727,
+      "p_value": 0.830498681077136
+    }
+  },
+  "nasa_tlx": {
+    "mental_demand": {
+      "control_mean": 50.0,
+      "control_std": 7.0710678118654755,
+      "treatment_mean": 37.5,
+      "treatment_std": 3.5355339059327378,
+      "t_stat": -5.0,
+      "p_value": 0.1256659163780024
+    },
+    "physical_demand": {
+      "control_mean": 10.0,
+      "control_std": 0.0,
+      "treatment_mean": 7.5,
+      "treatment_std": 3.5355339059327378,
+      "t_stat": -1.0,
+      "p_value": 0.5000000000000001
+    },
+    "temporal_demand": {
+      "control_mean": 35.0,
+      "control_std": 7.0710678118654755,
+      "treatment_mean": 30.0,
+      "treatment_std": 7.0710678118654755,
+      "t_stat": -Infinity,
+      "p_value": 0.0
+    },
+    "performance": {
+      "control_mean": 30.0,
+      "control_std": 7.0710678118654755,
+      "treatment_mean": 25.0,
+      "treatment_std": 7.0710678118654755,
+      "t_stat": -Infinity,
+      "p_value": 0.0
+    },
+    "effort": {
+      "control_mean": 45.0,
+      "control_std": 7.0710678118654755,
+      "treatment_mean": 37.5,
+      "treatment_std": 10.606601717798213,
+      "t_stat": -3.0,
+      "p_value": 0.20483276469913345
+    },
+    "frustration": {
+      "control_mean": 27.5,
+      "control_std": 10.606601717798213,
+      "treatment_mean": 20.0,
+      "treatment_std": 7.0710678118654755,
+      "t_stat": -3.0,
+      "p_value": 0.20483276469913345
+    },
+    "overall": {
+      "control_mean": 32.916666666666664,
+      "control_std": 6.481812160876687,
+      "treatment_mean": 26.25,
+      "treatment_std": 5.303300858899107,
+      "t_stat": -7.999999999999994,
+      "p_value": 0.07916684832113115
+    }
+  },
+  "missed_errors": {
+    "control_miss_rate_mean": 1.0,
+    "treatment_miss_rate_mean": 0.75,
+    "mann_whitney_u": 6.0,
+    "p_value": 0.8943502263331446,
+    "note": "One-sided test: treatment > control (complacency hypothesis)"
+  },
+  "post_task": {
+    "perceived_usefulness": {
+      "mean": 5.5,
+      "std": 0.7071067811865476,
+      "median": 5.5,
+      "n": 2
+    },
+    "perceived_reliability": {
+      "mean": 4.5,
+      "std": 0.7071067811865476,
+      "median": 4.5,
+      "n": 2
+    },
+    "confidence_with_highlighting": {
+      "mean": 5.5,
+      "std": 0.7071067811865476,
+      "median": 5.5,
+      "n": 2
+    },
+    "attention_allocation": {
+      "mean": 5.5,
+      "std": 0.7071067811865476,
+      "median": 5.5,
+      "n": 2
+    },
+    "complacency_awareness": {
+      "mean": 3.5,
+      "std": 0.7071067811865476,
+      "median": 3.5,
+      "n": 2
+    },
+    "overall_preference": {
+      "mean": 5.5,
+      "std": 0.7071067811865476,
+      "median": 5.5,
+      "n": 2
+    }
+  }
+}

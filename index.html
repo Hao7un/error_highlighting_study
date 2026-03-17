@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error Highlighting User Study — University of Cambridge</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Firebase SDK (v9 compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div class="study-container">
+    <!-- Header -->
+    <div class="study-header">
+      <h1>Error Highlighting in LLM-Generated Plans</h1>
+      <div class="subtitle">A User Study on Trust Calibration and Task Performance</div>
+      <div class="cambridge-badge">🎓 University of Cambridge — MLMI16</div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+      </div>
+      <div class="progress-label" id="progress-label">Step 1 of 15</div>
+    </div>
+
+    <!-- Dynamic Content Area -->
+    <div id="page-content"></div>
+  </div>
+
+  <!-- Scripts (order matters) -->
+  <script src="js/tasks.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
