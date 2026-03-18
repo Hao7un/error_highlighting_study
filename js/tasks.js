@@ -440,7 +440,7 @@ const TASKS = [
       success: true,
       summary: "Foreign exchange transactions completed. EUR purchase and USD sale processed through account 54321.",
     },
-    groundTruthPlan: "Login → Buy 10,000 EUR (as separate primary step) → Sell 5,000 USD (as separate primary step) → Confirm each",
+    groundTruthPlan: "Login (ID: 54321, PWD: PWD2023) → Buy 10,000 EUR → Sell 5,000 USD → Confirm each transaction",
   },
 ];
 

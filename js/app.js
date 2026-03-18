@@ -205,6 +205,9 @@ function renderConsentForm(c) {
       <div class="card">
         <h2>Participant Consent Form</h2>
         <p class="info-text" style="margin-bottom:1.25rem;">Please tick <strong>all</strong> boxes to confirm your consent.</p>
+        <div style="margin-bottom:0.75rem;">
+          <button class="btn btn-small btn-secondary" onclick="selectAllConsent()">Select All</button>
+        </div>
         <div id="consent-items">
           ${items.map((t, i) => `
             <div class="consent-item">
@@ -224,6 +227,11 @@ function renderConsentForm(c) {
 function checkConsent() {
   const all = Array.from(document.querySelectorAll('#consent-items input')).every(b => b.checked);
   document.getElementById("consent-btn").disabled = !all;
+}
+
+function selectAllConsent() {
+  document.querySelectorAll('#consent-items input').forEach(b => b.checked = true);
+  checkConsent();
 }
 
 function submitConsent() {
@@ -420,15 +428,14 @@ function renderFlagSteps(steps, condition, taskId, depth = 0) {
     const isHL = condition === "treatment" && step.hasHighlightedError;
     const hlCls = isHL ? "error-highlighted" : "";
 
-    // Collect all leaf step IDs (those without children get flag buttons)
+    // Steps with children are grouping headers — no flag buttons needed
     const hasChildren = step.children && step.children.length > 0;
-    const isPrimary = depth === 0 && hasChildren;
 
     html += `<div class="plan-step ${cls} ${hlCls}" data-step-id="${step.id}" data-task-id="${taskId}">
       <div class="plan-step-content">
         ${isHL ? '<span class="error-icon">⚠</span>' : ""}
         <span class="plan-step-text">${step.text}</span>
-        ${!isPrimary ? `
+        ${!hasChildren ? `
           <div class="flag-buttons" id="flags-${taskId}-${step.id}">
             <button class="flag-btn correct" onclick="flagStep('${taskId}','${step.id}','correct')" title="Looks correct">✅</button>
             <button class="flag-btn problem" onclick="flagStep('${taskId}','${step.id}','problem')" title="Has a problem">⚠️</button>
