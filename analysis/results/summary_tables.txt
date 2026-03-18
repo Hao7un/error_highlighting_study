@@ -12,9 +12,9 @@ repair            0.00%    100.00% +100.00%
 Overall          25.00%    100.00%  +75.00%
 
 =================================================================
-TABLE B: Editing Behavior by Task & Condition
+TABLE B: Flagging Behavior by Task & Condition
 =================================================================
-Task          C.Edits  T.Edits   C.Time   T.Time
+Task          C.Flags  T.Flags   C.Time   T.Time
 ----------------------------------------------
 alarm             1.0      1.0       95s       85s
 currency          1.0      1.0      130s      140s

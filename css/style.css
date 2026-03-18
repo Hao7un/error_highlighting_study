@@ -187,15 +187,6 @@ body {
 }
 .btn-secondary:hover { background: var(--border-light); }
 
-.btn-outline {
-  background: transparent;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  padding: 0.4rem 1rem;
-  font-size: 0.85rem;
-}
-.btn-outline:hover { background: var(--accent); color: #fff; }
-
 .btn-danger {
   background: var(--error-highlight);
   color: #fff;

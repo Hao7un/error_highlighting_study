@@ -1,9 +1,1 @@
-pid,task_id,condition,step_id,action,old_text,new_text
-P_SAMPLE_01,alarm,control,s3.1,edit,wrong AM,fixed PM
-P_SAMPLE_01,flight,control,s3.1,edit,London to Amsterdam,Amsterdam to London
-P_SAMPLE_01,repair,treatment,s1.2,edit,Samsung,Sony
-P_SAMPLE_01,repair,treatment,s3.1,edit,5 PM,6 PM
-P_SAMPLE_01,currency,treatment,s2.1.1,edit,5000,10000
-P_SAMPLE_02,alarm,treatment,s3.1,edit,08:00 AM,08:00 PM
-P_SAMPLE_02,flight,treatment,s3.1,edit,London,Amsterdam
-P_SAMPLE_02,currency,control,s2.1.1,edit,5000,10000
+

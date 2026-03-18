@@ -29,7 +29,7 @@ TASK_ERRORS = {
     "alarm":    {"highlighted": ["s3.1"], "non_highlighted": ["s3.3"], "has_imperfect_plan": True},
     "flight":   {"highlighted": ["s3.1"], "non_highlighted": ["s4.1"], "has_imperfect_plan": True},
     "repair":   {"highlighted": ["s1.2"], "non_highlighted": ["s3.1"], "has_imperfect_plan": True},
-    "currency": {"highlighted": ["s2.1.1"], "non_highlighted": ["s2"], "has_imperfect_plan": True},
+    "currency": {"highlighted": ["s2.1.1"], "non_highlighted": ["s1.1"], "has_imperfect_plan": True},
 }
 
 ERROR_CATALOG = {
@@ -40,7 +40,7 @@ ERROR_CATALOG = {
     "repair:s1.2":   {"type": "wrong_value",     "desc": "Wrong brand name"},
     "repair:s3.1":   {"type": "wrong_value",     "desc": "Wrong appointment time"},
     "currency:s2.1.1": {"type": "wrong_value",   "desc": "Wrong amount"},
-    "currency:s2":   {"type": "structural",       "desc": "Transactions not split"},
+    "currency:s1.1":   {"type": "wrong_value",   "desc": "Wrong password (PWD2024 vs PWD2023)"},
 }
 
 # ---------------------------------------------------------------------------
@@ -122,30 +122,25 @@ def build_dataframes(participants):
             "ai_trust_baseline":safe_int(d.get("ai_trust"))})
 
         for tid, tr in p.get("taskResults",{}).items():
-            edits = tr.get("edits",[])
-            edited_ids = {e["stepId"] for e in edits if e.get("action") in ("edit","delete")}
+            step_flags = tr.get("stepFlags",{})
+            flagged_problem = {k for k,v in step_flags.items() if v=="problem"}
+            flagged_correct = {k for k,v in step_flags.items() if v=="correct"}
             te = TASK_ERRORS.get(tid,{})
             hl_e, nh_e = set(te.get("highlighted",[])), set(te.get("non_highlighted",[]))
-            hl_det, nh_det = len(edited_ids & hl_e), len(edited_ids & nh_e)
+            hl_det, nh_det = len(flagged_problem & hl_e), len(flagged_problem & nh_e)
             trust = tr.get("trustJudgment")
             cal = (1 if not trust else 0) if trust is not None else None  # all plans imperfect
 
             task_rows.append({"pid":pid, "task_id":tid, "condition":tr.get("condition"),
                 "risk":tr.get("risk"), "trust_judgment":trust, "calibrated_trust":cal,
-                "num_edits":len(edits),
-                "num_edit_actions":len([e for e in edits if e["action"]=="edit"]),
-                "num_delete_actions":len([e for e in edits if e["action"]=="delete"]),
-                "num_add_actions":len([e for e in edits if e["action"]=="add"]),
+                "num_flagged_problem":len(flagged_problem),
+                "num_flagged_correct":len(flagged_correct),
+                "total_steps_reviewed":len(step_flags),
                 "duration_ms":tr.get("duration"), "duration_s":(tr.get("duration") or 0)/1000,
                 "hl_detected":hl_det, "hl_total":len(hl_e),
                 "nh_detected":nh_det, "nh_total":len(nh_e),
                 "missed_nh_rate":(len(nh_e)-nh_det)/len(nh_e) if nh_e else None,
                 "missed_hl_rate":(len(hl_e)-hl_det)/len(hl_e) if hl_e else None})
-
-            for edit in edits:
-                edit_rows.append({"pid":pid,"task_id":tid,"condition":tr.get("condition"),
-                    "step_id":edit.get("stepId"),"action":edit.get("action"),
-                    "old_text":edit.get("oldText"),"new_text":edit.get("newText")})
 
         cond_order = p.get("conditionOrder",["control","treatment"])
         for ck,cl in [("conditionA",cond_order[0]),("conditionB",cond_order[1])]:
@@ -180,11 +175,11 @@ def analyze_H1(df):
     return {"overall":overall, "by_task":by_task}
 
 # ---------------------------------------------------------------------------
-# H2: Editing Behavior (cf. Section 5.2.2)
+# H2: Flagging Behavior (cf. Section 5.2.2)
 # ---------------------------------------------------------------------------
 def analyze_H2(df):
     r = {}
-    for m in ["num_edits","num_edit_actions","duration_s"]:
+    for m in ["num_flagged_problem","duration_s"]:
         g = df.groupby(["pid","condition"])[m].sum().reset_index()
         c = g[g["condition"]=="control"][m].values
         t = g[g["condition"]=="treatment"][m].values
@@ -193,8 +188,8 @@ def analyze_H2(df):
     tb = {}
     for tid in df["task_id"].unique():
         s = df[df["task_id"]==tid]
-        tb[tid] = {"ctrl_edits":float(s[s["condition"]=="control"]["num_edits"].mean()),
-                   "treat_edits":float(s[s["condition"]=="treatment"]["num_edits"].mean()),
+        tb[tid] = {"ctrl_flags":float(s[s["condition"]=="control"]["num_flagged_problem"].mean()),
+                   "treat_flags":float(s[s["condition"]=="treatment"]["num_flagged_problem"].mean()),
                    "ctrl_dur":float(s[s["condition"]=="control"]["duration_s"].mean()),
                    "treat_dur":float(s[s["condition"]=="treatment"]["duration_s"].mean())}
     r["by_task"] = tb
@@ -245,7 +240,7 @@ def analyze_tlx(df):
 # ---------------------------------------------------------------------------
 def analyze_covariates(df_tasks, df_demo):
     agg = df_tasks.groupby("pid").agg(
-        CTp=("calibrated_trust","mean"), edits=("num_edits","mean"),
+        CTp=("calibrated_trust","mean"), edits=("num_flagged_problem","mean"),
         duration=("duration_s","mean"), MERnh=("missed_nh_rate","mean")).reset_index()
     m = agg.merge(df_demo[["pid","ai_trust_baseline"]],on="pid",how="left").dropna(subset=["ai_trust_baseline"])
     if len(m)<3: return {"note":"Insufficient data"}
@@ -265,8 +260,8 @@ def analyze_task_correlations(df):
     risk_map = {"low":1,"medium":2,"high":3}
     df2 = df.copy(); df2["risk_num"] = df2["risk"].map(risk_map)
     pairs = [("risk_num","calibrated_trust","Risk × CTp"),
-             ("risk_num","num_edits","Risk × Edits"),
-             ("num_edits","calibrated_trust","Edits × CTp"),
+             ("risk_num","num_flagged_problem","Risk × Flags"),
+             ("num_flagged_problem","calibrated_trust","Flags × CTp"),
              ("risk_num","duration_s","Risk × Duration")]
     r = {}
     for x,y,label in pairs:
@@ -279,22 +274,24 @@ def analyze_task_correlations(df):
 # ---------------------------------------------------------------------------
 # Failure Analysis (cf. Section 5.3.3)
 # ---------------------------------------------------------------------------
-def analyze_failures(df_tasks, df_edits):
+def analyze_failures(df_tasks, participants):
+    """Uses stepFlags from raw participant data for per-error detection rates."""
+    flags_map = {}
+    for p in participants:
+        pid = p["participantId"]
+        flags_map[pid] = {}
+        for tid, tr in p.get("taskResults", {}).items():
+            flags_map[pid][tid] = {k for k, v in tr.get("stepFlags", {}).items() if v == "problem"}
     r = {}
     for task_id in df_tasks["task_id"].unique():
         td = df_tasks[df_tasks["task_id"]==task_id]
-        te = df_edits[df_edits["task_id"]==task_id] if not df_edits.empty else pd.DataFrame()
-        by_pid = {}
-        if not te.empty:
-            for pid, grp in te.groupby("pid"):
-                by_pid[pid] = set(grp["step_id"].values)
-
         for ekey, info in ERROR_CATALOG.items():
             if not ekey.startswith(task_id+":"): continue
             step_id = ekey.split(":")[1]
             det = {"control":[],"treatment":[]}
             for _, row in td.iterrows():
-                det[row["condition"]].append(1 if step_id in by_pid.get(row["pid"],set()) else 0)
+                flagged = flags_map.get(row["pid"], {}).get(task_id, set())
+                det[row["condition"]].append(1 if step_id in flagged else 0)
             r[ekey] = {"type":info["type"], "desc":info["desc"],
                        "ctrl_rate":float(np.mean(det["control"])) if det["control"] else None,
                        "treat_rate":float(np.mean(det["treatment"])) if det["treatment"] else None,
@@ -334,14 +331,14 @@ def print_tables(df):
     print(f"{'Overall':<12} {c_all:>10.2%} {t_all:>10.2%} {t_all-c_all:>+8.2%}")
 
     print("\n" + "="*65)
-    print("TABLE B: Editing Behavior by Task & Condition")
+    print("TABLE B: Flagging Behavior by Task & Condition")
     print("="*65)
-    print(f"{'Task':<12} {'C.Edits':>8} {'T.Edits':>8} {'C.Time':>8} {'T.Time':>8}")
+    print(f"{'Task':<12} {'C.Flags':>8} {'T.Flags':>8} {'C.Time':>8} {'T.Time':>8}")
     print("-"*46)
     for tid in sorted(df["task_id"].unique()):
         s = df[df["task_id"]==tid]
-        ce = s[s["condition"]=="control"]["num_edits"].mean()
-        te = s[s["condition"]=="treatment"]["num_edits"].mean()
+        ce = s[s["condition"]=="control"]["num_flagged_problem"].mean()
+        te = s[s["condition"]=="treatment"]["num_flagged_problem"].mean()
         ct = s[s["condition"]=="control"]["duration_s"].mean()
         tt = s[s["condition"]=="treatment"]["duration_s"].mean()
         print(f"{tid:<12} {ce:>8.1f} {te:>8.1f} {ct:>8.0f}s {tt:>8.0f}s")
@@ -388,9 +385,9 @@ def main():
     print(f"  Control: M={o['control_mean']:.3f}  Treatment: M={o['treatment_mean']:.3f}  d={o.get('cohens_d','N/A')}  {o.get('sig','')}")
 
     print("\n" + "="*60)
-    print("H2: Editing Behavior"); print("="*60)
+    print("H2: Flagging Behavior"); print("="*60)
     results["H2"] = analyze_H2(dfs["tasks"])
-    for m in ["num_edits","duration_s"]:
+    for m in ["num_flagged_problem","duration_s"]:
         v = results["H2"][m]
         print(f"  {m}: Ctrl={v['control_mean']:.1f} Treat={v['treatment_mean']:.1f} {v.get('sig','')}")
 
@@ -424,7 +421,7 @@ def main():
 
     print("\n" + "="*60)
     print("Failure Analysis (cf. Section 5.3.3)"); print("="*60)
-    results["failures"] = analyze_failures(dfs["tasks"], dfs["edits"])
+    results["failures"] = analyze_failures(dfs["tasks"], participants)
     for k,v in results["failures"].items():
         cr = f"{v['ctrl_rate']:.0%}" if v["ctrl_rate"] is not None else "-"
         tr = f"{v['treat_rate']:.0%}" if v["treat_rate"] is not None else "-"

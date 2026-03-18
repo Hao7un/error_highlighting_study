@@ -37,25 +37,7 @@
     }
   },
   "H2": {
-    "num_edits": {
-      "control_mean": 1.5,
-      "control_std": 0.7071067811865476,
-      "control_n": 2,
-      "treatment_mean": 2.5,
-      "treatment_std": 0.7071067811865476,
-      "treatment_n": 2,
-      "ttest_paired": {
-        "t": Infinity,
-        "p": 0.0
-      },
-      "wilcoxon": {
-        "W": 0.0,
-        "p": 0.5
-      },
-      "cohens_d": 1.414213562373095,
-      "sig": "\u2020\u2020"
-    },
-    "num_edit_actions": {
+    "num_flagged_problem": {
       "control_mean": 1.5,
       "control_std": 0.7071067811865476,
       "control_n": 2,
@@ -93,26 +75,26 @@
     },
     "by_task": {
       "alarm": {
-        "ctrl_edits": 1.0,
-        "treat_edits": 1.0,
+        "ctrl_flags": 1.0,
+        "treat_flags": 1.0,
         "ctrl_dur": 95.0,
         "treat_dur": 85.0
       },
       "flight": {
-        "ctrl_edits": 1.0,
-        "treat_edits": 1.0,
+        "ctrl_flags": 1.0,
+        "treat_flags": 1.0,
         "ctrl_dur": 120.0,
         "treat_dur": 100.0
       },
       "repair": {
-        "ctrl_edits": 0.0,
-        "treat_edits": 2.0,
+        "ctrl_flags": 0.0,
+        "treat_flags": 2.0,
         "ctrl_dur": 75.0,
         "treat_dur": 110.0
       },
       "currency": {
-        "ctrl_edits": 1.0,
-        "treat_edits": 1.0,
+        "ctrl_flags": 1.0,
+        "treat_flags": 1.0,
         "ctrl_dur": 130.0,
         "treat_dur": 140.0
       }
@@ -353,12 +335,12 @@
       "p": 1.0,
       "sig": ""
     },
-    "Risk \u00d7 Edits": {
+    "Risk \u00d7 Flags": {
       "r": 0.0,
       "p": 1.0,
       "sig": ""
     },
-    "Edits \u00d7 CTp": {
+    "Flags \u00d7 CTp": {
       "r": 0.5163977794943222,
       "p": 0.19011614915973798,
       "sig": ""
@@ -426,9 +408,9 @@
       "ctrl_n": 1,
       "treat_n": 1
     },
-    "currency:s2": {
-      "type": "structural",
-      "desc": "Transactions not split",
+    "currency:s1.1": {
+      "type": "wrong_value",
+      "desc": "Wrong password (PWD2024 vs PWD2023)",
       "ctrl_rate": 0.0,
       "treat_rate": 0.0,
       "ctrl_n": 1,

@@ -353,9 +353,12 @@ const TASKS = [
         children: [
           {
             id: "s1.1",
-            text: "1.1 Obtain account login information (Account ID: 54321, Account Password: PWD2023)",
+            // NON-HIGHLIGHTED ERROR: Wrong password — PWD2024 instead of PWD2023
+            text: "1.1 Obtain account login information (Account ID: 54321, Account Password: PWD2024)",
             hasHighlightedError: false,
-            hasNonHighlightedError: false,
+            hasNonHighlightedError: true,
+            errorDescription: "Wrong password: should be PWD2023, not PWD2024",
+            correctText: "1.1 Obtain account login information (Account ID: 54321, Account Password: PWD2023)",
           },
           {
             id: "s1.2",
@@ -374,11 +377,7 @@ const TASKS = [
       {
         id: "s2",
         primary: true,
-        // NON-HIGHLIGHTED ERROR: Both transactions are grouped under one primary step
-        // (should be split into two separate primary steps)
         text: "2. Conduct foreign exchange transactions",
-        hasNonHighlightedError: true,
-        errorDescription: "Two distinct transactions should be in separate primary steps for correct sequential execution",
         children: [
           {
             id: "s2.1",

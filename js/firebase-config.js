@@ -17,7 +17,7 @@ const firebaseConfig = {
   storageBucket: "error-highlighting-study.firebasestorage.app",
   messagingSenderId: "1075199296528",
   appId: "1:1075199296528:web:2d4e451b910a2fa3d5f695",
-  measurementId: "G-DXE416DPB8"
+  measurementId: "G-DXE416DPB8",
 };
 
 // Initialize Firebase

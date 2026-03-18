@@ -1,3 +1,3 @@
 pid,group,age,gender,education,llm_freq,llm_familiarity,ai_trust_baseline
-P_SAMPLE_01,1,25–34,Male,Master's degree,Daily,Very familiar — I regularly evaluate and edit LLM outputs,5
-P_SAMPLE_02,2,18–24,Female,Undergraduate,Several times a week,Somewhat familiar — I use LLMs but don't closely scrutinise outputs,4
+P_SAMPLE_01,1,,,,Daily,,5
+P_SAMPLE_02,2,,,,Several times a week,,4
