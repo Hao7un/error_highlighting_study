@@ -267,10 +267,10 @@ function renderPreStudy(c) {
     <div class="study-page active">
       <div class="card">
         <h2>Quick Background Questions</h2>
-        <p class="info-text" style="margin-bottom:1.5rem;">Just two quick questions before we begin.</p>
+        <p class="info-text" style="margin-bottom:1.5rem;">A few quick questions before we begin.</p>
 
         <div class="form-group">
-          <label>How often do you use LLM-based tools (e.g., ChatGPT, Claude)? <span class="required-star">*</span></label>
+          <label>1. How often do you use LLM-based tools (e.g., ChatGPT, Claude)? <span class="required-star">*</span></label>
           <div class="radio-group">
             ${["Daily", "Several times a week", "Once a week", "A few times a month", "Rarely"].map(v => `
               <label class="radio-option"><input type="radio" name="llm_freq" value="${v}"> ${v}</label>`).join("")}
@@ -278,7 +278,7 @@ function renderPreStudy(c) {
         </div>
 
         <div class="form-group">
-          <label>In general, how much do you trust AI systems to provide accurate information? <span class="required-star">*</span></label>
+          <label>2. In general, how much do you trust AI systems to provide accurate information? <span class="required-star">*</span></label>
           <div class="likert-container" style="background:transparent; padding:0;">
             <div class="likert-scale">
               ${[1,2,3,4,5,6,7].map(v => `<label><input type="radio" name="ai_trust" value="${v}"> ${v}</label>`).join("")}
@@ -287,7 +287,33 @@ function renderPreStudy(c) {
           </div>
         </div>
 
-        <p class="validation-error" id="prestudy-error">Please answer both questions.</p>
+        <div class="form-group">
+          <label>3. How carefully do you typically check details when reviewing content produced by others (e.g., AI-generated text, colleagues' drafts)? <span class="required-star">*</span></label>
+          <div class="likert-container" style="background:transparent; padding:0;">
+            <div class="likert-scale">
+              ${[1,2,3,4,5,6,7].map(v => `<label><input type="radio" name="attention_detail" value="${v}"> ${v}</label>`).join("")}
+            </div>
+            <div class="likert-endpoints"><span>1 — Not at all carefully</span><span>7 — Extremely carefully</span></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>4. How often have you encountered errors or inaccuracies in LLM-generated outputs? <span class="required-star">*</span></label>
+          <div class="radio-group">
+            ${["Never", "Rarely", "Sometimes", "Often", "Very often"].map(v => `
+              <label class="radio-option"><input type="radio" name="ai_error_exp" value="${v}"> ${v}</label>`).join("")}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>5. How often do you use step-by-step plans or checklists to organise your daily tasks? <span class="required-star">*</span></label>
+          <div class="radio-group">
+            ${["Never", "Rarely", "Sometimes", "Often", "Always"].map(v => `
+              <label class="radio-option"><input type="radio" name="planning_freq" value="${v}"> ${v}</label>`).join("")}
+          </div>
+        </div>
+
+        <p class="validation-error" id="prestudy-error">Please answer all questions.</p>
         <div class="btn-group center">
           <button class="btn btn-secondary" onclick="navigateTo('consent-form')">← Back</button>
           <button class="btn btn-primary" onclick="submitPreStudy()">Continue →</button>
@@ -299,11 +325,20 @@ function renderPreStudy(c) {
 function submitPreStudy() {
   const freq = document.querySelector('input[name="llm_freq"]:checked');
   const trust = document.querySelector('input[name="ai_trust"]:checked');
-  if (!freq || !trust) {
+  const attention = document.querySelector('input[name="attention_detail"]:checked');
+  const errorExp = document.querySelector('input[name="ai_error_exp"]:checked');
+  const planning = document.querySelector('input[name="planning_freq"]:checked');
+  if (!freq || !trust || !attention || !errorExp || !planning) {
     document.getElementById("prestudy-error").classList.add("visible");
     return;
   }
-  state.demographics = { llm_freq: freq.value, ai_trust: trust.value };
+  state.demographics = {
+    llm_freq: freq.value,
+    ai_trust: trust.value,
+    attention_detail: attention.value,
+    ai_error_exp: errorExp.value,
+    planning_freq: planning.value
+  };
   saveToFirebase(state.participantId, { demographics: state.demographics });
   navigateTo("tutorial");
 }
@@ -619,7 +654,12 @@ function renderPostTask(c) {
             <div class="likert-endpoints"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
           </div>`).join("")}
 
-        <p class="validation-error" id="posttask-error">Please answer all questions.</p>
+        <div class="form-group" style="margin-top:1rem;">
+          <label style="font-weight:600;">If you could change one thing about the error highlighting feature, what would it be? <em>(Optional)</em></label>
+          <textarea id="post-desired-improvement" rows="3" style="width:100%;padding:0.55rem 0.75rem;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:0.9rem;resize:vertical;box-sizing:border-box;" placeholder="Type your answer here..."></textarea>
+        </div>
+
+        <p class="validation-error" id="posttask-error">Please answer all Likert-scale questions.</p>
         <div class="btn-group center">
           <button class="btn btn-primary" onclick="submitPostTask()">Continue →</button>
         </div>
@@ -636,6 +676,7 @@ function submitPostTask() {
     data[q.id] = parseInt(el.value);
   });
   if (!valid) { document.getElementById("posttask-error").classList.add("visible"); return; }
+  data.desired_improvement = document.getElementById("post-desired-improvement").value.trim();
   state.postTask = data;
   saveToFirebase(state.participantId, { postTask: data });
   navigateTo("interview");

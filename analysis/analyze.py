@@ -117,9 +117,11 @@ def build_dataframes(participants):
         pid = p["participantId"]
         d = p.get("demographics",{})
         demo_rows.append({"pid":pid, "group":p.get("counterbalanceGroup"),
-            "age":d.get("age"), "gender":d.get("gender"), "education":d.get("education"),
-            "llm_freq":d.get("llm_freq"), "llm_familiarity":d.get("llm_familiarity"),
-            "ai_trust_baseline":safe_int(d.get("ai_trust"))})
+            "llm_freq":d.get("llm_freq"),
+            "ai_trust_baseline":safe_int(d.get("ai_trust")),
+            "attention_detail":safe_int(d.get("attention_detail")),
+            "ai_error_exp":d.get("ai_error_exp"),
+            "planning_freq":d.get("planning_freq")})
 
         for tid, tr in p.get("taskResults",{}).items():
             step_flags = tr.get("stepFlags",{})
@@ -242,15 +244,27 @@ def analyze_covariates(df_tasks, df_demo):
     agg = df_tasks.groupby("pid").agg(
         CTp=("calibrated_trust","mean"), edits=("num_flagged_problem","mean"),
         duration=("duration_s","mean"), MERnh=("missed_nh_rate","mean")).reset_index()
-    m = agg.merge(df_demo[["pid","ai_trust_baseline"]],on="pid",how="left").dropna(subset=["ai_trust_baseline"])
+
+    # Map ordinal pre-study variables to numeric for correlation
+    error_exp_map = {"Never":1, "Rarely":2, "Sometimes":3, "Often":4, "Very often":5}
+    planning_map = {"Never":1, "Rarely":2, "Sometimes":3, "Often":4, "Always":5}
+    df_demo = df_demo.copy()
+    df_demo["ai_error_exp_num"] = df_demo["ai_error_exp"].map(error_exp_map)
+    df_demo["planning_freq_num"] = df_demo["planning_freq"].map(planning_map)
+
+    covariates = ["ai_trust_baseline", "attention_detail", "ai_error_exp_num", "planning_freq_num"]
+    covariate_labels = ["ai_trust", "attention_detail", "ai_error_exp", "planning_freq"]
+
+    m = agg.merge(df_demo[["pid"] + covariates], on="pid", how="left")
     if len(m)<3: return {"note":"Insufficient data"}
     r = {}
-    for dv in ["CTp","edits","duration","MERnh"]:
-        valid = m[["ai_trust_baseline",dv]].dropna()
-        if len(valid)>=3:
-            rho, p = stats.spearmanr(valid["ai_trust_baseline"], valid[dv])
-            sig = "††" if p<ALPHA_CORRECTED else "†" if p<ALPHA else ""
-            r[f"ai_trust × {dv}"] = {"r":float(rho),"p":float(p),"sig":sig}
+    for cv, label in zip(covariates, covariate_labels):
+        for dv in ["CTp","edits","duration","MERnh"]:
+            valid = m[[cv,dv]].dropna()
+            if len(valid)>=3:
+                rho, p = stats.spearmanr(valid[cv], valid[dv])
+                sig = "††" if p<ALPHA_CORRECTED else "†" if p<ALPHA else ""
+                r[f"{label} × {dv}"] = {"r":float(rho),"p":float(p),"sig":sig}
     return r
 
 # ---------------------------------------------------------------------------
@@ -436,7 +450,7 @@ def main():
     # Demographics
     print("\n" + "="*60)
     print("Demographics"); print("="*60)
-    for col in ["age","gender","education","llm_freq"]:
+    for col in ["llm_freq","ai_trust_baseline","attention_detail","ai_error_exp","planning_freq"]:
         if col in dfs["demographics"].columns:
             print(f"  {col}: {dfs['demographics'][col].value_counts().to_dict()}")
 

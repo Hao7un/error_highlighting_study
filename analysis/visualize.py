@@ -276,9 +276,9 @@ def fig_demographics(dfs, outdir):
     
     fig, axes = plt.subplots(1, 3, figsize=(12, 4))
     
-    for ax, col, title in zip(axes, 
-                               ["age", "gender", "llm_freq"],
-                               ["Age Distribution", "Gender", "LLM Usage Frequency"]):
+    for ax, col, title in zip(axes,
+                               ["llm_freq", "ai_error_exp", "planning_freq"],
+                               ["LLM Usage Frequency", "AI Error Experience", "Planning Frequency"]):
         if col not in df.columns:
             continue
         counts = df[col].value_counts()

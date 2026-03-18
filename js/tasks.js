@@ -557,6 +557,10 @@ const POST_TASK_QUESTIONS = [
     id: "overall_preference",
     text: "I would prefer to have error highlighting when reviewing LLM-generated plans in the future.",
   },
+  {
+    id: "risk_sensitivity",
+    text: "I paid more attention when reviewing plans for higher-risk tasks (e.g., currency exchange) compared to lower-risk tasks (e.g., setting a reminder).",
+  },
 ];
 
 /**
