@@ -215,7 +215,19 @@ function renderConsentForm(c) {
               <span>${i + 1}. ${t}</span>
             </div>`).join("")}
         </div>
-        <p class="validation-error" id="consent-error">Please confirm all items to proceed.</p>
+        <div class="consent-signature">
+          <div class="signature-row">
+            <div class="signature-field">
+              <label for="consent-name">Signature (Full Name)</label>
+              <input type="text" id="consent-name" placeholder="Enter your full name" oninput="checkConsent()">
+            </div>
+            <div class="signature-field">
+              <label for="consent-date">Date</label>
+              <input type="date" id="consent-date" oninput="checkConsent()">
+            </div>
+          </div>
+        </div>
+        <p class="validation-error" id="consent-error">Please confirm all items, enter your name and date to proceed.</p>
         <div class="btn-group center">
           <button class="btn btn-secondary" onclick="navigateTo('info-sheet')">← Back</button>
           <button class="btn btn-primary" id="consent-btn" disabled onclick="submitConsent()">I Consent — Continue →</button>
@@ -225,8 +237,10 @@ function renderConsentForm(c) {
 }
 
 function checkConsent() {
-  const all = Array.from(document.querySelectorAll('#consent-items input')).every(b => b.checked);
-  document.getElementById("consent-btn").disabled = !all;
+  const allChecked = Array.from(document.querySelectorAll('#consent-items input')).every(b => b.checked);
+  const name = document.getElementById("consent-name").value.trim();
+  const date = document.getElementById("consent-date").value;
+  document.getElementById("consent-btn").disabled = !(allChecked && name && date);
 }
 
 function selectAllConsent() {
@@ -235,7 +249,12 @@ function selectAllConsent() {
 }
 
 function submitConsent() {
-  state.consent = { consented: true, timestamp: new Date().toISOString() };
+  state.consent = {
+    consented: true,
+    signatureName: document.getElementById("consent-name").value.trim(),
+    signatureDate: document.getElementById("consent-date").value,
+    timestamp: new Date().toISOString()
+  };
   saveToFirebase(state.participantId, { consent: state.consent, counterbalanceGroup: state.counterbalanceGroup });
   navigateTo("pre-study");
 }

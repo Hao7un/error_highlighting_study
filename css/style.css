@@ -408,6 +408,47 @@ input[type="range"]::-webkit-slider-thumb {
   line-height: 1.5;
 }
 
+.consent-signature {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.signature-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.signature-field {
+  flex: 1;
+}
+
+.signature-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: var(--text-muted);
+}
+
+.signature-field input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: var(--bg-card);
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+.signature-field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(45, 90, 39, 0.15);
+}
+
 /* ---- Plan display ---- */
 .task-briefing {
   background: var(--info-bg);
