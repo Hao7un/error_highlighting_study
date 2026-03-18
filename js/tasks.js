@@ -58,9 +58,11 @@ const TASKS = [
         children: [
           {
             id: "s2.1",
+            // FALSE ALARM: This step is correct — cancelling the Thursday 7:30 AM alarm is right
             text: "2.1 Get the information of the alarm to be cancelled (Time: 07:30 AM, Frequency: Thursday)",
             hasHighlightedError: false,
             hasNonHighlightedError: false,
+            hasFalseAlarm: true,
           },
           {
             id: "s2.2",
@@ -133,9 +135,11 @@ const TASKS = [
         children: [
           {
             id: "s1.1",
+            // FALSE ALARM: This step is correct — departure is tomorrow (not the Wednesday meeting day)
             text: "1.1 Obtain outbound flight search information (Departure City: London, Arrival City: Amsterdam, Departure Date: Tomorrow, Departure Time Slot: Morning)",
             hasHighlightedError: false,
             hasNonHighlightedError: false,
+            hasFalseAlarm: true,
           },
           {
             id: "s1.2",
@@ -279,9 +283,11 @@ const TASKS = [
         children: [
           {
             id: "s2.1",
+            // FALSE ALARM: This step is correct — searching for Sony providers is right
             text: "2.1 Search for authorized Sony repair service providers in the area",
             hasHighlightedError: false,
             hasNonHighlightedError: false,
+            hasFalseAlarm: true,
           },
           {
             id: "s2.2",
@@ -415,9 +421,11 @@ const TASKS = [
             children: [
               {
                 id: "s2.2.1",
+                // FALSE ALARM: This step is correct — selling 5,000 USD matches the user's request
                 text: "2.2.1 Obtain information for selling US dollars (Currency Type: USD, Sell Amount: 5,000)",
                 hasHighlightedError: false,
                 hasNonHighlightedError: false,
+                hasFalseAlarm: true,
               },
               {
                 id: "s2.2.2",

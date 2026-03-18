@@ -479,7 +479,7 @@ function renderFlagSteps(steps, condition, taskId, depth = 0) {
   let html = "";
   for (const step of steps) {
     const cls = depth === 0 ? "primary" : depth === 1 ? "sub" : "sub-sub";
-    const isHL = condition === "treatment" && step.hasHighlightedError;
+    const isHL = condition === "treatment" && (step.hasHighlightedError || step.hasFalseAlarm);
     const hlCls = isHL ? "error-highlighted" : "";
 
     // Steps with children are grouping headers — no flag buttons needed

@@ -26,21 +26,25 @@ ALPHA = 0.05
 ALPHA_CORRECTED = ALPHA / 3  # Bonferroni for 3 hypotheses
 
 TASK_ERRORS = {
-    "alarm":    {"highlighted": ["s3.1"], "non_highlighted": ["s3.3"], "has_imperfect_plan": True},
-    "flight":   {"highlighted": ["s3.1"], "non_highlighted": ["s4.1"], "has_imperfect_plan": True},
-    "repair":   {"highlighted": ["s1.2"], "non_highlighted": ["s3.1"], "has_imperfect_plan": True},
-    "currency": {"highlighted": ["s2.1.1"], "non_highlighted": ["s1.1"], "has_imperfect_plan": True},
+    "alarm":    {"highlighted": ["s3.1"], "non_highlighted": ["s3.3"], "false_alarms": ["s2.1"], "has_imperfect_plan": True},
+    "flight":   {"highlighted": ["s3.1"], "non_highlighted": ["s4.1"], "false_alarms": ["s1.1"], "has_imperfect_plan": True},
+    "repair":   {"highlighted": ["s1.2"], "non_highlighted": ["s3.1"], "false_alarms": ["s2.1"], "has_imperfect_plan": True},
+    "currency": {"highlighted": ["s2.1.1"], "non_highlighted": ["s1.1"], "false_alarms": ["s2.2.1"], "has_imperfect_plan": True},
 }
 
 ERROR_CATALOG = {
     "alarm:s3.1":    {"type": "wrong_value",    "desc": "AM vs PM time error"},
     "alarm:s3.3":    {"type": "irrelevant_step", "desc": "Irrelevant time zone check"},
+    "alarm:s2.1":    {"type": "false_alarm",     "desc": "Correct: cancel Thursday 7:30 AM alarm"},
     "flight:s3.1":   {"type": "swapped_values",  "desc": "Departure/arrival cities swapped"},
     "flight:s4.1":   {"type": "wrong_label",     "desc": "Outbound vs return mislabel"},
+    "flight:s1.1":   {"type": "false_alarm",     "desc": "Correct: departure date is tomorrow (not Wednesday)"},
     "repair:s1.2":   {"type": "wrong_value",     "desc": "Wrong brand name"},
     "repair:s3.1":   {"type": "wrong_value",     "desc": "Wrong appointment time"},
+    "repair:s2.1":   {"type": "false_alarm",     "desc": "Correct: searching for Sony providers is right"},
     "currency:s2.1.1": {"type": "wrong_value",   "desc": "Wrong amount"},
     "currency:s1.1":   {"type": "wrong_value",   "desc": "Wrong password (PWD2024 vs PWD2023)"},
+    "currency:s2.2.1": {"type": "false_alarm",   "desc": "Correct: selling 5,000 USD matches request"},
 }
 
 # ---------------------------------------------------------------------------
@@ -129,7 +133,9 @@ def build_dataframes(participants):
             flagged_correct = {k for k,v in step_flags.items() if v=="correct"}
             te = TASK_ERRORS.get(tid,{})
             hl_e, nh_e = set(te.get("highlighted",[])), set(te.get("non_highlighted",[]))
+            fa_e = set(te.get("false_alarms",[]))
             hl_det, nh_det = len(flagged_problem & hl_e), len(flagged_problem & nh_e)
+            fa_accepted = len(flagged_problem & fa_e)  # user wrongly flagged correct step as problem
             trust = tr.get("trustJudgment")
             cal = (1 if not trust else 0) if trust is not None else None  # all plans imperfect
 
@@ -141,6 +147,8 @@ def build_dataframes(participants):
                 "duration_ms":tr.get("duration"), "duration_s":(tr.get("duration") or 0)/1000,
                 "hl_detected":hl_det, "hl_total":len(hl_e),
                 "nh_detected":nh_det, "nh_total":len(nh_e),
+                "fa_accepted":fa_accepted, "fa_total":len(fa_e),
+                "fa_acceptance_rate":fa_accepted/len(fa_e) if fa_e else None,
                 "missed_nh_rate":(len(nh_e)-nh_det)/len(nh_e) if nh_e else None,
                 "missed_hl_rate":(len(hl_e)-hl_det)/len(hl_e) if hl_e else None})
 
@@ -219,6 +227,47 @@ def analyze_H3(df):
         by_task[tid] = {"ctrl":float(s[s["condition"]=="control"]["missed_nh_rate"].mean()) if len(s[s["condition"]=="control"])>0 else None,
                         "treat":float(s[s["condition"]=="treatment"]["missed_nh_rate"].mean()) if len(s[s["condition"]=="treatment"])>0 else None}
     return {"overall":overall, "hl_detection":hl_info, "by_task":by_task}
+
+# ---------------------------------------------------------------------------
+# False Alarm Acceptance (treatment only)
+# ---------------------------------------------------------------------------
+def analyze_false_alarms(df):
+    """Measures whether users wrongly flag correct-but-highlighted steps as problems."""
+    treat = df[(df["condition"]=="treatment") & df["fa_acceptance_rate"].notna()]
+    ctrl = df[(df["condition"]=="control") & df["fa_acceptance_rate"].notna()]
+    t_vals = treat["fa_acceptance_rate"].values
+    c_vals = ctrl["fa_acceptance_rate"].values
+
+    r = {
+        "treatment": {
+            "mean": float(np.mean(t_vals)) if len(t_vals)>0 else None,
+            "std": float(np.std(t_vals, ddof=1)) if len(t_vals)>1 else None,
+            "n": int(len(t_vals)),
+            "ci95": _ci95(t_vals),
+        },
+        "control": {
+            "mean": float(np.mean(c_vals)) if len(c_vals)>0 else None,
+            "std": float(np.std(c_vals, ddof=1)) if len(c_vals)>1 else None,
+            "n": int(len(c_vals)),
+            "ci95": _ci95(c_vals),
+        },
+        "note": "FA acceptance rate: proportion of correct-but-highlighted steps wrongly flagged as problem. "
+                "Control serves as baseline (same steps, no highlighting)."
+    }
+    if len(c_vals)>=2 and len(t_vals)>=2:
+        r["comparison"] = _paired_comparison(c_vals, t_vals, "FA_acceptance")
+    # Per-task breakdown
+    by_task = {}
+    for tid in df["task_id"].unique():
+        s = df[df["task_id"]==tid]
+        ct = s[(s["condition"]=="control") & s["fa_acceptance_rate"].notna()]["fa_acceptance_rate"]
+        tt = s[(s["condition"]=="treatment") & s["fa_acceptance_rate"].notna()]["fa_acceptance_rate"]
+        by_task[tid] = {
+            "ctrl": float(ct.mean()) if len(ct)>0 else None,
+            "treat": float(tt.mean()) if len(tt)>0 else None,
+        }
+    r["by_task"] = by_task
+    return r
 
 # ---------------------------------------------------------------------------
 # NASA-TLX (cf. Figure 4 with 95% CI)
@@ -370,6 +419,19 @@ def print_tables(df):
         ts = f"{t:.0%}" if not np.isnan(t) else "N/A"
         print(f"{tid:<12} {cs:>10} {ts:>10}")
 
+    print("\n" + "="*65)
+    print("TABLE D: False Alarm Acceptance Rate (correct steps wrongly flagged)")
+    print("="*65)
+    print(f"{'Task':<12} {'Control':>10} {'Treatment':>10}")
+    print("-"*34)
+    for tid in sorted(df["task_id"].unique()):
+        s = df[df["task_id"]==tid]
+        c = s[s["condition"]=="control"]["fa_acceptance_rate"].mean()
+        t = s[s["condition"]=="treatment"]["fa_acceptance_rate"].mean()
+        cs = f"{c:.0%}" if not np.isnan(c) else "N/A"
+        ts = f"{t:.0%}" if not np.isnan(t) else "N/A"
+        print(f"{tid:<12} {cs:>10} {ts:>10}")
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -412,6 +474,16 @@ def main():
     print(f"  MERnh: Ctrl={me['control_mean']:.3f} Treat={me['treatment_mean']:.3f} {me.get('sig','')}")
     hl = results["H3"]["hl_detection"]
     print(f"  Highlighted error detection (treatment): M={hl['mean']:.2%}" if hl["mean"] else "")
+
+    print("\n" + "="*60)
+    print("False Alarm Acceptance"); print("="*60)
+    results["false_alarms"] = analyze_false_alarms(dfs["tasks"])
+    fa = results["false_alarms"]
+    print(f"  Treatment: M={fa['treatment']['mean']:.2%}" if fa["treatment"]["mean"] is not None else "  Treatment: N/A")
+    print(f"  Control (baseline): M={fa['control']['mean']:.2%}" if fa["control"]["mean"] is not None else "  Control: N/A")
+    if "comparison" in fa:
+        comp = fa["comparison"]
+        print(f"  Comparison: {comp.get('sig','')} d={comp.get('cohens_d','N/A')}")
 
     print("\n" + "="*60)
     print("NASA-TLX Cognitive Load"); print("="*60)
